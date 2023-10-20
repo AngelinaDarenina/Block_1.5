@@ -1,29 +1,36 @@
 "use strict";
 
 // СВАЙПЕР (инициализация)
-const swiper = new Swiper('.swiper', {
- direction: 'horizontal',
-loop: true,
-pagination: {
-el: '.swiper-pagination',
- },
-});
+let swiper = null; // Инициализируем переменную для хранения экземпляра свайпера
 
-//отключение свайпера при ширине экрана больше 767 px
+function initializeSwiper() {
+  swiper = new Swiper('.swiper', {
+    direction: 'horizontal',
+    loop: true,
+    pagination: {
+      el: '.swiper-pagination',
+    },
+  });
+}
 
 function disableSwiperIfScreenIsWide() {
   const screenWidth = window.innerWidth;
 
-  if (screenWidth > 767) { 
-    swiper.destroy(); 
+  if (screenWidth > 767) {
+    if (swiper) {
+      swiper.destroy();
+      swiper = null; // Уничтожаем экземпляр и сбрасываем переменную
+    }
   } else {
-    swiper.init();//
+    if (!swiper) {
+      initializeSwiper(); // Инициализируем свайпер, если его нет
+    }
   }
 }
-// вызываем функцию при загрузке страницы и изменении размера окна
+
+// Вызываем функции при загрузке страницы и изменении размера окна
 window.addEventListener('load', disableSwiperIfScreenIsWide);
 window.addEventListener('resize', disableSwiperIfScreenIsWide);
-
 
 //КНОПКА
 //-------------------------------------------------------------------------------------------------------------------------------
